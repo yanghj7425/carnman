@@ -2,11 +2,24 @@ import request from '@/utils/request'
 
 export function login(username, password) {
   return request({
-    url: '/user/login',
+    url: 'login',
     method: 'post',
     data: {
       username,
       password
+    },
+    transformRequest: [
+      function(data) {
+        let ret = ''
+        for (const it in data) {
+          ret +=
+            encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+        }
+        return ret
+      }
+    ],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
 }

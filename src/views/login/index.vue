@@ -10,7 +10,7 @@
           v-model="loginForm.username"
           type="text"
           name="username"
-          auto-complete="no"
+          auto-complete="off"
           placeholder="username"
         />
       </el-form-item>
@@ -22,7 +22,7 @@
           :type="pwdType"
           v-model="loginForm.password"
           name="password"
-          auto-complete="no"
+          auto-complete="off"
           placeholder="password"/>
         <span class="show-pwd" @click="showPwd">
           <svg-icon v-if="pwdType === 'password'" icon-class="closeeye" />
@@ -62,8 +62,8 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: 'admin'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUserName }],
