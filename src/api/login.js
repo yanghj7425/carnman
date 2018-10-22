@@ -1,41 +1,14 @@
-import request from '@/utils/request'
+import http from '@/utils/request'
 
 export function login(username, password) {
-  console.log(request)
-  return request({
-    url: 'login',
-    method: 'post',
-    data: {
-      username,
-      password
-    },
-    transformRequest: [
-      function(data) {
-        let ret = ''
-        for (const it in data) {
-          ret +=
-            encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-        }
-        return ret
-      }
-    ],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
+  return http.postRequest('login', { username, password })
 }
 
 export function getInfo(token) {
-  return request({
-    url: 'user/info',
-    method: 'get',
-    params: { token }
-  })
+  var baseUrl = 'user/info?' + token
+  return http.getRequet(baseUrl)
 }
 
 export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
-  })
+  return http.postRequest('logout', {})
 }

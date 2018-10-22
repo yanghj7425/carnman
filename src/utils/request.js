@@ -70,8 +70,8 @@ service.interceptors.response.use(
 )
 
 const base = ''
-export const postRequest = (url, params) => {
-  return axios({
+const postRequest = (url, params) => {
+  return service({
     method: 'post',
     url: `${base}${url}`,
     data: params,
@@ -91,8 +91,8 @@ export const postRequest = (url, params) => {
   })
 }
 
-export const uploadFileRequest = (url, params) => {
-  return axios({
+const uploadFileRequest = (url, params) => {
+  return service({
     method: 'post',
     url: `${base}${url}`,
     data: params,
@@ -101,8 +101,8 @@ export const uploadFileRequest = (url, params) => {
     }
   })
 }
-export const putRequest = (url, params) => {
-  return axios({
+const putRequest = (url, params) => {
+  return service({
     method: 'put',
     url: `${base}${url}`,
     data: params,
@@ -122,17 +122,23 @@ export const putRequest = (url, params) => {
   })
 }
 
-export const deleteRequest = url => {
-  return axios({
+const deleteRequest = url => {
+  return service({
     method: 'delete',
     url: `${base}${url}`
   })
 }
-export const getRequest = url => {
-  return axios({
+const getRequest = url => {
+  return service({
     method: 'get',
     url: `${base}${url}`
   })
 }
 
-export default service
+export default {
+  postRequest,
+  uploadFileRequest,
+  putRequest,
+  deleteRequest,
+  getRequest
+}
