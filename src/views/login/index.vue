@@ -91,13 +91,13 @@ export default {
       }
     },
     handlerLogin() {
-      var _this = this
+      // var _this = this
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          _this.loading = true
-          _this.$store.dispatch('Login', _this.loginForm).then(() => {
-            _this.loading = false
-            _this.$router.push({ path: _this.redirect || '/' })
+          this.loading = true
+          this.$store.dispatch('Login', this.loginForm).then(() => {
+            this.loading = false
+            this.$router.push({ path: this.redirect || '/' })
           })
         } else {
           alert('submit error')

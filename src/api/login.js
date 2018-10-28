@@ -5,8 +5,8 @@ export function login(username, password) {
 }
 
 export function getInfo(token) {
-  var baseUrl = 'user/info?' + token
-  return http.getRequet(baseUrl)
+  var baseUrl = 'sys/login?token=' + token
+  return http.getRequest(baseUrl)
 }
 
 export function logout() {
