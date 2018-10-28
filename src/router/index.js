@@ -8,7 +8,8 @@ export const constantRouterMap = [
   {
     path: '/',
     name: 'Layout',
-    component: Layout
+    component: Layout,
+    hidden: true
   },
   {
     path: '/login',

@@ -82,7 +82,7 @@ import countTo from '@/components/countTo/vue-count-to'
 export default {
   name: 'HelloWorld',
   components: { countTo },
-  data() {
+  data: function() {
     return {
       msg: 'Welcome to Your Vue.js App'
     }

@@ -30,7 +30,7 @@
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width:100%;" @click="handlerLogin">登陆</el-button>
+        <el-button :loading="loading" type="primary" style="width:100%;" @click="handlerLogin">登陆</el-button>
       </el-form-item>
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -74,6 +74,14 @@ export default {
       redirect: ''
     }
   },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
   methods: {
     showPwd() {
       if (this.pwdType === 'password') {
@@ -83,12 +91,13 @@ export default {
       }
     },
     handlerLogin() {
+      var _this = this
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+          _this.loading = true
+          _this.$store.dispatch('Login', _this.loginForm).then(() => {
+            _this.loading = false
+            _this.$router.push({ path: _this.redirect || '/' })
           })
         } else {
           alert('submit error')

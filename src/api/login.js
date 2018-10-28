@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 export function login(username, password) {
-  return http.postRequest('login', { username, password })
+  return http.postRequest('sys/login', { username, password })
 }
 
 export function getInfo(token) {

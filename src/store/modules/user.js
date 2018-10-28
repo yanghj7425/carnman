@@ -18,7 +18,7 @@ const user = {
     SER_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_TOLES: (state, roles) => {
+    SET_ROLES: (state, roles) => {
       state.roles = roles
     }
   },
@@ -31,6 +31,8 @@ const user = {
           .then(response => {
             const data = response.data
             setToken(data.token)
+            commit('SET_NAME', data.name)
+            commit('SET_ROLES', data.roles)
             commit('SET_TOKEN', data.token)
             resolve()
           })
