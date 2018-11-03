@@ -11,8 +11,6 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    var token = store.getters.token
-    console.log(token)
     if (store.getters.token) {
       config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
@@ -32,7 +30,6 @@ service.interceptors.response.use(
      * code为非20000是抛错 可结合自己业务进行修改
      */
     const res = response.data
-    console.log(res)
     if (res.status !== 200) {
       Message({
         message: res.message,

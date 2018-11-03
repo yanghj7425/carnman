@@ -7,9 +7,21 @@ Vue.use(Router)
 export const constantRouterMap = [
   {
     path: '/',
+    name: 'home',
+    component: Layout,
+    redirect: '/home',
+    hidden: true,
+    children: [
+      {
+        path: 'home',
+        component: () => import('@/views/home')
+      }
+    ]
+  },
+  {
+    path: '/sd',
     name: 'Layout',
     component: Layout,
-    hidden: false,
     meta: { title: '布局1' },
     children: [
       {

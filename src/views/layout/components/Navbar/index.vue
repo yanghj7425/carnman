@@ -1,9 +1,16 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">This is header</el-menu>
+  <el-menu class="navbar" mode="horizontal">
+    <bread-crumb/>
+  </el-menu>
 </template>
+
 <script>
+import BreadCrumb from '@/components/BreadCrumb'
 export default {
-  name: 'Navar'
+  name: 'Navar',
+  components: {
+    BreadCrumb
+  }
 }
 </script>
 

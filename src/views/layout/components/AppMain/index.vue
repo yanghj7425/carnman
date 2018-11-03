@@ -1,6 +1,9 @@
 <template>
-
-  <el-main class="app-main">Main</el-main>
+  <el-main class="app-main">
+    <transition name="fade-transform" mode="out-in">
+      <router-view/>
+    </transition>
+  </el-main>
 
 </template>
 <script>
