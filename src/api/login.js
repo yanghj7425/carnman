@@ -9,6 +9,6 @@ export function getInfo(token) {
   return http.getRequest(baseUrl)
 }
 
-export function logout() {
-  return http.postRequest('logout', {})
+export function logOut() {
+  return http.postRequest('sys/logout')
 }

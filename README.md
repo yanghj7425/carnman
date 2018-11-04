@@ -1,7 +1,5 @@
 # y
 
-> y
-
 ## Build Setup
 
 ```bash
@@ -65,3 +63,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   "javascript.format.insertSpaceBeforeFunctionParenthesis": true
 }
 ```
+
+## 约定
+
+| 状态码（status） | 标识 | 消息（msg）  | 备注 |
+| ---------------- | ---- | ------------ | ---- |
+| 10000            | 成功 | 接口调用成功 | 暂无 |
+| 10001            | 失败 | 程序执行失败 | 暂无 |
