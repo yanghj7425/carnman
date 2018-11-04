@@ -22,7 +22,7 @@ export const constantRouterMap = [
     path: '/sd',
     name: 'Layout',
     component: Layout,
-    meta: { title: '布局1' },
+    meta: { title: '布局1', icon: 'example' },
     children: [
       {
         path: 'table',
@@ -41,7 +41,7 @@ export const constantRouterMap = [
     name: 'dis1',
     component: Layout,
     hidden: false,
-    meta: { title: '布局2' },
+    meta: { title: '布局2', icon: 'tree' },
     children: [
       {
         path: 'table',
@@ -60,7 +60,7 @@ export const constantRouterMap = [
     name: 'dis1s',
     component: Layout,
     hidden: false,
-    meta: { title: '布局3' },
+    meta: { title: '布局3', icon: 'tree' },
     children: [
       {
         path: 'table',
@@ -79,7 +79,7 @@ export const constantRouterMap = [
     name: 'dis1ss',
     component: Layout,
     hidden: false,
-    meta: { title: '布局4' },
+    meta: { title: '布局4', icon: 'tree' },
     children: [
       {
         path: 'table',
