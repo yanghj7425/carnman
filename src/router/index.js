@@ -98,9 +98,12 @@ export const constantRouterMap = [
     path: '/login',
     component: () => import('@/views/admin/login/index'),
     hidden: true
-  }
+  },
   // 后台路由结束
   // 签到台路由开始
+  {
+    path: '/facede'
+  }
 ]
 
 export default new Router({
