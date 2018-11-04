@@ -1,27 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Layout from '../views/layout/Layout'
+import Admin from '@/views/admin/layout'
 
 Vue.use(Router)
 
 export const constantRouterMap = [
+  // 后台路由开始
   {
     path: '/',
     name: 'home',
-    component: Layout,
+    component: Admin,
     redirect: '/home',
     hidden: true,
     children: [
       {
         path: 'home',
-        component: () => import('@/views/home')
+        component: () => import('@/views/admin/home')
       }
     ]
   },
   {
     path: '/sd',
     name: 'Layout',
-    component: Layout,
+    component: Admin,
     meta: { title: '布局1', icon: 'example' },
     children: [
       {
@@ -39,7 +40,7 @@ export const constantRouterMap = [
   {
     path: '/dis',
     name: 'dis1',
-    component: Layout,
+    component: Admin,
     hidden: false,
     meta: { title: '布局2', icon: 'tree' },
     children: [
@@ -58,7 +59,7 @@ export const constantRouterMap = [
   {
     path: '/diss',
     name: 'dis1s',
-    component: Layout,
+    component: Admin,
     hidden: false,
     meta: { title: '布局3', icon: 'tree' },
     children: [
@@ -77,7 +78,7 @@ export const constantRouterMap = [
   {
     path: '/disss',
     name: 'dis1ss',
-    component: Layout,
+    component: Admin,
     hidden: false,
     meta: { title: '布局4', icon: 'tree' },
     children: [
@@ -95,9 +96,11 @@ export const constantRouterMap = [
   },
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    component: () => import('@/views/admin/login/index'),
     hidden: true
   }
+  // 后台路由结束
+  // 签到台路由开始
 ]
 
 export default new Router({
