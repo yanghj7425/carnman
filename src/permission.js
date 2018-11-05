@@ -4,7 +4,7 @@ import NProgress from 'nprogress' // Progress 进度条
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 
-const whiteList = ['/login']
+const whiteList = ['/login', '/facede']
 router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果获取到 token 信息

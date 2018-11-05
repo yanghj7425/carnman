@@ -102,7 +102,9 @@ export const constantRouterMap = [
   // 后台路由结束
   // 签到台路由开始
   {
-    path: '/facede'
+    path: '/facede',
+    name: 'Facede',
+    component: () => import('@/views/facede/index')
   }
 ]
 
