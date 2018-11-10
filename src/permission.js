@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next(`/login`) // 否则全部重定向到登录页
-      // next(`/facede`) // 否则全部重定向到登录页
+      // next(`/facede`) // 否则全部重定向到前端
       NProgress.done()
     }
   }
