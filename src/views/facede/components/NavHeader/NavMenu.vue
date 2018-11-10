@@ -3,7 +3,7 @@
     <img :src="logoImg" class="logo-box">
     <div class="title-box">
       <span style="font-size:35px">
-        鹤贤居
+        XX居
       </span>
     </div>
     <el-menu :default-active="activeIndex" class="el-menu-demo menu-box" mode="horizontal" @select="handleSelect">
