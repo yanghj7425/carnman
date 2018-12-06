@@ -3,7 +3,7 @@ import NProgress from 'nprogress' // Progress 进度条
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 
-import { constantRouterMap, asyncRouterMap, router } from './router'
+import { router } from './router'
 
 const whiteList = ['/login', '/facede']
 router.beforeEach((to, from, next) => {
@@ -19,7 +19,12 @@ router.beforeEach((to, from, next) => {
         console.log(to.meta)
       }
       if (store.getters.roles.length === 0) {
-        if (hasPermission(store.getters.roles, router.options.routes)) {
+        if (
+          store.permission.hasPermission(
+            store.getters.roles,
+            router.options.routes
+          )
+        ) {
           next()
         } else {
           next(`/login`)
@@ -29,12 +34,18 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch('GetInfo')
           .then(res => {
-            permission.init({
-              roles: store.getters.roles,
-              router: router.options.routes
+            const roles = store.getters.roles
+            store.dispatch('GenerateRoutes', { roles }).then(() => {
+              router.addRoutes(store.getters.addRoutes)
+              next({ ...to, replace: true })
             })
             // 如果有权限
-            if (hasPermission(store.getters.roles, router.options.route)) {
+            if (
+              store.permission.hasPermission(
+                store.getters.roles,
+                router.options.route
+              )
+            ) {
               next()
             } else {
               next(`/login`)
@@ -58,56 +69,3 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
-
-/**
- *
- * @param {角色} roles
- * @param {路由} route
- */
-function hasPermission(roles, route) {
-  if (roles.indexOf('admin') >= 0) return true
-  if (route.meta && route.meta.role) {
-    return roles.some(role => route.meta.role.indexOf(role) >= 0)
-  } else {
-    return true
-  }
-}
-
-const permission = {
-  state: {
-    routes: constantRouterMap,
-    addRouters: []
-  },
-  mutations: {
-    SET_ROUTERS: (state, routers) => {
-      state.addRouters = routers
-      state.routers = constantRouterMap.concat(routers)
-    }
-  },
-  actions: {
-    generateRoutes({ commit }, data) {
-      return new Promise(resolve => {
-        const { roles } = data
-        const accessedRouter = asyncRouterMap.filter(v => {
-          if (roles.indexOf('admin') >= 0) return true
-          if (hasPermission(roles, v)) {
-            if (v.children && v.children.length > 0) {
-              v.children = v.children.filter(child => {
-                if (hasPermission(roles, child)) {
-                  return child
-                }
-                return false
-              })
-              return v
-            } else {
-              return v
-            }
-          }
-          return false
-        })
-        commit('SET_ROUTERS', accessedRouter)
-        resolve()
-      })
-    }
-  }
-}
