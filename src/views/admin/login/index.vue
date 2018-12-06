@@ -91,7 +91,6 @@ export default {
       }
     },
     handlerLogin() {
-      // var _this = this
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
           this.loading = true

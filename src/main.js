@@ -12,7 +12,7 @@ import '@/styles/index.scss' // global css
 import 'babel-polyfill'
 
 import App from './App'
-import router from './router'
+import { router } from './router'
 import store from './store'
 
 import '@/icons' // icon
