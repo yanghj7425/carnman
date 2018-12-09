@@ -108,28 +108,28 @@ export const constantRouterMap = [
   }
 ]
 
-export const asyncRouterMap = [
-  {
-    path: '/permission',
-    component: Admin,
-    name: '权限测试',
-    meta: { role: ['admin', 'keeper'] },
-    children: [
-      {
-        path: 'index',
-        component: Admin,
-        name: '权限测试页',
-        meta: { role: ['admin', 'kepper'] }
-      }
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
-]
-
 export const router = new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
+export const asyncRouterMap = [
+  {
+    path: '/permission',
+    component: Admin,
+    name: '权限测试',
+    meta: { role: ['ROLE_USER', 'keeper'] },
+    children: [
+      {
+        path: 'index',
+        component: Admin,
+        name: '权限测试页',
+        meta: { role: ['ROLE_ADMIN', 'ROLE_USER'] }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]
 
 export default router

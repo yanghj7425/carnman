@@ -30,7 +30,7 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         const accessedRouter = asyncRouterMap.filter(v => {
-          if (roles.indexOf('admin') >= 0) return true
+          if (roles.indexOf('ROLE_ADMIN') >= 0) return true
           if (hasPermission(roles, v)) {
             if (v.children && v.children.length > 0) {
               v.children = v.children.filter(child => {

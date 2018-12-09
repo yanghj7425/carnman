@@ -2,7 +2,6 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
-
 import { router } from './router'
 
 const whiteList = ['/login', '/facede']
@@ -30,13 +29,12 @@ router.beforeEach((to, from, next) => {
           next(`/login`)
         }
       } else {
-        console.log(store.getters.roles)
         store
           .dispatch('GetInfo')
           .then(res => {
             const roles = store.getters.roles
             store.dispatch('GenerateRoutes', { roles }).then(() => {
-              router.addRoutes(store.getters.addRoutes)
+              router.addRoutes(store.getters.addRouters)
               next({ ...to, replace: true })
             })
             // 如果有权限
