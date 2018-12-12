@@ -50,7 +50,6 @@ const permission = {
         resolve()
       })
     }
-  },
-  hasPermission
+  }
 }
 export default permission

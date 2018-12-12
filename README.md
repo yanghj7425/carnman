@@ -64,6 +64,14 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 }
 ```
 
+## 角色
+
+| 角色           | 描述   | 备注 |
+| -------------- | ------ | ---- |
+| ROLE_ANONYMOUS | 匿名   |      |
+| ROLE_ADMIN     | 管理员 |      |
+| ROLE_USER      | 用户   |      |
+
 ## 约定
 
 | 状态码（status） | 标识 | 消息（msg）  | 备注 |

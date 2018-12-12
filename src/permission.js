@@ -5,6 +5,16 @@ import { getToken } from '@/utils/auth'
 import { router } from './router'
 
 const whiteList = ['/login', '/facede']
+
+function hasPermission(roles, route) {
+  if (roles.indexOf('admin') >= 0) return true
+  if (route.meta && route.meta.role) {
+    return roles.some(role => route.meta.role.indexOf(role) >= 0)
+  } else {
+    return true
+  }
+}
+
 router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果获取到 token 信息
@@ -17,13 +27,9 @@ router.beforeEach((to, from, next) => {
       if (to.meta && to.meta.role) {
         console.log(to.meta)
       }
+      console.log(store.getters.roles)
       if (store.getters.roles.length === 0) {
-        if (
-          store.permission.hasPermission(
-            store.getters.roles,
-            router.options.routes
-          )
-        ) {
+        if (hasPermission(store.getters.roles, router.options.routes)) {
           next()
         } else {
           next(`/login`)
@@ -38,12 +44,7 @@ router.beforeEach((to, from, next) => {
               next({ ...to, replace: true })
             })
             // 如果有权限
-            if (
-              store.permission.hasPermission(
-                store.getters.roles,
-                router.options.route
-              )
-            ) {
+            if (hasPermission(store.getters.roles, router.options.route)) {
               next()
             } else {
               next(`/login`)
