@@ -32,7 +32,6 @@ const user = {
             const data = response.data
             setToken(data.token)
             commit('SET_NAME', data.name)
-            commit('SET_ROLES', data.roles)
             commit('SET_TOKEN', data.token)
             resolve()
           })
