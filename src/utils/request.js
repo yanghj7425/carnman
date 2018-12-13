@@ -8,6 +8,10 @@ const service = axios.create({
   baseURL: process.env.BASE_API,
   timeout: 5 * 1000 * 10
 })
+
+// service.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+// service.defaults.withCredentials = true
+
 // request拦截器
 service.interceptors.request.use(
   config => {

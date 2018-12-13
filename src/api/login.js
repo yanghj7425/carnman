@@ -5,10 +5,9 @@ export function login(username, password) {
 }
 
 export function getInfo(token) {
-  var baseUrl = 'sys/login?token=' + token
-  return http.getRequest(baseUrl)
+  return http.getRequest('sys/login')
 }
 
 export function logOut() {
-  return http.postRequest('sys/logout')
+  return http.getRequest('sys/logout')
 }
