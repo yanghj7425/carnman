@@ -16,6 +16,10 @@ export const constantRouterMap = [
       {
         path: 'home',
         component: () => import('@/views/admin/home')
+      },
+      {
+        path: 'home',
+        component: () => import('@/views/admin/home')
       }
     ]
   },
@@ -23,6 +27,7 @@ export const constantRouterMap = [
     path: '/sd',
     name: 'Layout',
     component: Admin,
+    hidden: false,
     meta: { title: '布局1', icon: 'example' },
     children: [
       {
@@ -31,8 +36,8 @@ export const constantRouterMap = [
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'trese',
+        name: 'Tresae',
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
@@ -45,13 +50,13 @@ export const constantRouterMap = [
     meta: { title: '布局2', icon: 'tree' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'a',
+        name: 'Tabdle',
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'taree',
+        name: 'Trqwee',
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
@@ -64,13 +69,13 @@ export const constantRouterMap = [
     meta: { title: '布局3', icon: 'tree' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'tasdfble',
+        name: 'Tasdfble',
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'tadree',
+        name: 'Tsdfree',
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
@@ -83,13 +88,13 @@ export const constantRouterMap = [
     meta: { title: '布局4', icon: 'tree' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'table1',
+        name: 'Table1',
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'tree2',
+        name: 'Tree3',
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
@@ -119,17 +124,25 @@ export const asyncRouterMap = [
     path: '/permission',
     component: Admin,
     name: '权限测试',
-    meta: { role: ['ROLE_USER', 'keeper'] },
+    hidden: false,
+    meta: { role: ['ROLE_ADMIN'], title: '权限测试' },
     children: [
       {
-        path: 'index',
+        path: '/kkkk',
         component: Admin,
+        hidden: false,
         name: '权限测试页',
-        meta: { role: ['ROLE_ADMIN', 'ROLE_USER'] }
+        meta: { role: ['ROLE_ADMIN'], title: 'haha' }
+      },
+      {
+        path: '/kkk2k',
+        component: Admin,
+        name: '权限测试页1',
+        meta: { role: ['ROLE_ADMIN'], title: 'wowo' }
       }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', name: '404', redirect: '/404', hidden: true }
 ]
 
 export default router

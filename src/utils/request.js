@@ -9,18 +9,16 @@ const service = axios.create({
   timeout: 5 * 1000 * 10
 })
 
-// service.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-// service.defaults.withCredentials = true
+service.defaults.headers['crossDomain'] = true
+service.defaults.headers['xhrFields'] = {
+  withCredentials: true
+}
 
 // request拦截器
 service.interceptors.request.use(
   config => {
     if (store.getters.token) {
       config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-      config.headers['crossDomain'] = true
-      config.headers['xhrFields'] = {
-        withCredentials: true
-      }
     }
     return config
   },

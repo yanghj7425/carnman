@@ -22,6 +22,14 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+Vue.directive('has', {
+  bind: function(el, binding) {
+    if (!Vue.prototype.has(binding.value)) {
+      el.parentNode.removeChild(el)
+    }
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

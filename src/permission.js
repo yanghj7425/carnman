@@ -27,8 +27,7 @@ router.beforeEach((to, from, next) => {
       if (to.meta && to.meta.role) {
         console.log(to.meta)
       }
-      console.log(store.getters.roles)
-      if (store.getters.roles.length === 0) {
+      if (store.getters.roles.length !== 0) {
         if (hasPermission(store.getters.roles, router.options.routes)) {
           next()
         } else {
@@ -43,8 +42,10 @@ router.beforeEach((to, from, next) => {
               router.addRoutes(store.getters.addRouters)
               next({ ...to, replace: true })
             })
+            const _to = to
+            console.log(_to)
             // 如果有权限
-            if (hasPermission(store.getters.roles, router.options.route)) {
+            if (hasPermission(store.getters.roles, to)) {
               next()
             } else {
               next(`/login`)

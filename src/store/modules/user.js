@@ -31,7 +31,6 @@ const user = {
           .then(response => {
             const data = response.data
             setToken(data.token)
-            commit('SET_NAME', data.name)
             commit('SET_TOKEN', data.token)
             resolve()
           })

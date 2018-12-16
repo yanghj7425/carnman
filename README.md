@@ -60,7 +60,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   //  #使用带引号替代双引号
   "prettier.singleQuote": true,
   //  #让函数(名)和后面的括号之间加个空格
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+
+  // # 去掉import 后面的分号
+  "vetur.format.defaultFormatter.js": "vscode-typescript"
 }
 ```
 
