@@ -43,16 +43,11 @@ service.interceptors.response.use(
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
+        }).then(() => {
+          store.dispatch('FedLogOut').then(() => {
+            location.reload() // avoid bug reinstantiation vue-router object
+          })
         })
-          .then(() => {
-            store.dispatch('FedLogOut').then(() => {
-              location.reload() // avoid bug reinstantiation vue-router object
-            })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-        return Promise.reject(res.message)
       }
       // alert error message
       Message({
@@ -60,6 +55,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+      return Promise.reject(res.message)
     } else {
       return response
     }

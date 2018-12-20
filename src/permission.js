@@ -1,5 +1,6 @@
 import store from './store'
 import NProgress from 'nprogress' // Progress
+import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import { router } from './router'
 
@@ -33,19 +34,27 @@ router.beforeEach((to, from, next) => {
           next(`/login`)
         }
       } else {
-        store.dispatch('GetInfo').then(res => {
-          const roles = store.getters.roles
-          store.dispatch('GenerateRoutes', { roles }).then(() => {
-            router.addRoutes(store.getters.addRouters)
-            next({ ...to, replace: true })
+        store
+          .dispatch('GetInfo')
+          .then(res => {
+            const roles = store.getters.roles
+            store.dispatch('GenerateRoutes', { roles }).then(() => {
+              router.addRoutes(store.getters.addRouters)
+              next({ ...to, replace: true })
+            })
+            // if have permission
+            if (hasPermission(store.getters.roles, to)) {
+              next()
+            } else {
+              next(`/login`)
+            }
           })
-          // if have permission
-          if (hasPermission(store.getters.roles, to)) {
-            next()
-          } else {
-            next(`/login`)
-          }
-        })
+          .catch(error => {
+            store.dispatch('FedLogOut').then(() => {
+              Message.error(error || 'Verification failed, please login again')
+              next({ path: '/' })
+            })
+          })
         // here will be catch exception if have other problem
       }
     }

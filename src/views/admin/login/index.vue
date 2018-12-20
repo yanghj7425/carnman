@@ -100,6 +100,8 @@ export default {
           }, (err) => {
             this.loading = false
             console.log(err) // for debug
+          }).catch(error => {
+            console.log(error)
           })
         } else {
           alert('submit error')
