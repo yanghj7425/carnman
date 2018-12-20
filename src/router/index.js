@@ -24,63 +24,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/sd',
-    name: 'Layout',
-    component: Admin,
-    hidden: false,
-    meta: { title: '布局1', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'trese',
-        name: 'Tresae',
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/dis',
-    name: 'dis1',
-    component: Admin,
-    hidden: false,
-    meta: { title: '布局2', icon: 'tree' },
-    children: [
-      {
-        path: 'a',
-        name: 'Tabdle',
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'taree',
-        name: 'Trqwee',
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/diss',
-    name: 'dis1s',
-    component: Admin,
-    hidden: false,
-    meta: { title: '布局3', icon: 'tree' },
-    children: [
-      {
-        path: 'tasdfble',
-        name: 'Tasdfble',
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tadree',
-        name: 'Tsdfree',
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
     path: '/disss',
     name: 'dis1ss',
     component: Admin,
@@ -93,9 +36,9 @@ export const constantRouterMap = [
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree2',
-        name: 'Tree3',
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'table1',
+        name: 'Table1',
+        meta: { title: 'Table', icon: 'table' }
       }
     ]
   },
@@ -121,22 +64,22 @@ export const router = new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/permission',
+    path: '/user',
     component: Admin,
-    name: '权限测试',
+    name: '用户管理',
     hidden: false,
-    meta: { role: ['ROLE_ADMIN'], title: '权限测试' },
+    meta: { role: ['ROLE_ADMIN'], title: '用户管理', icon: 'user' },
     children: [
       {
         path: '/kkkk',
-        component: Admin,
+        component: () => import('@/views/admin/home'),
         hidden: false,
         name: '权限测试页',
         meta: { role: ['ROLE_ADMIN'], title: 'haha' }
       },
       {
         path: '/kkk2k',
-        component: Admin,
+        component: () => import('@/views/admin/home'),
         name: '权限测试页1',
         meta: { role: ['ROLE_ADMIN'], title: 'wowo' }
       }

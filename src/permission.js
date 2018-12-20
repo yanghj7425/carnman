@@ -1,6 +1,5 @@
 import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
-import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import { router } from './router'
 
@@ -34,29 +33,20 @@ router.beforeEach((to, from, next) => {
           next(`/login`)
         }
       } else {
-        store
-          .dispatch('GetInfo')
-          .then(res => {
-            const roles = store.getters.roles
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
-              router.addRoutes(store.getters.addRouters)
-              next({ ...to, replace: true })
-            })
-            const _to = to
-            console.log(_to)
-            // 如果有权限
-            if (hasPermission(store.getters.roles, to)) {
-              next()
-            } else {
-              next(`/login`)
-            }
+        store.dispatch('GetInfo').then(res => {
+          const roles = store.getters.roles
+          store.dispatch('GenerateRoutes', { roles }).then(() => {
+            router.addRoutes(store.getters.addRouters)
+            next({ ...to, replace: true })
           })
-          .catch(error => {
-            store.dispatch('FedLogOut').then(() => {
-              Message.error(error || 'Verification failed, please login again')
-              next({ path: '/' })
-            })
-          })
+          // 如果有权限
+          if (hasPermission(store.getters.roles, to)) {
+            next()
+          } else {
+            next(`/login`)
+          }
+        })
+        // 未捕获异常
       }
     }
   } else {

@@ -8,7 +8,7 @@
           :index="resolvePath(onlyOneChild.path)"
           :class="{'submenu-title-noDropdown':!isNest}"
         >
-          <item
+          <menu-item
             v-if="onlyOneChild.meta"
             :icon="onlyOneChild.meta.icon||item.meta.icon"
             :title="onlyOneChild.meta.title"
