@@ -36,8 +36,8 @@ export const constantRouterMap = [
         meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'table1',
-        name: 'Table1',
+        path: 'tablse1',
+        name: 'Tablse1',
         meta: { title: 'Table', icon: 'table' }
       }
     ]

@@ -41,7 +41,7 @@ service.interceptors.response.use(
       if (res.status === 2005) {
         MessageBox.confirm('验证错误，' + res.message, '确定登出', {
           confirmButtonText: '确定',
-          showCancelButton: false,
+          cancelButtonText: '取消',
           type: 'warning'
         })
           .then(() => {
@@ -71,7 +71,9 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     })
-    return Promise.reject(error)
+    store.dispatch('FedLogOut').then(() => {
+      location.reload() // avoid bug reinstantiation vue-router object
+    })
   }
 )
 

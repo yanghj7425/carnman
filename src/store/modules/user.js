@@ -6,7 +6,8 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    users: []
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -23,7 +24,7 @@ const user = {
     }
   },
   actions: {
-    // 登陆
+    // login
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
@@ -40,7 +41,7 @@ const user = {
       })
     },
 
-    // 获取用户信息
+    // get curent login user information
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token)
