@@ -1,10 +1,9 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-
       <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="user"/>
         </span>
         <el-input
           v-model="loginForm.username"
@@ -16,17 +15,18 @@
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="password"/>
         </span>
         <el-input
           :type="pwdType"
           v-model="loginForm.password"
           name="password"
           auto-complete="off"
-          placeholder="password"/>
+          placeholder="password"
+        />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon v-if="pwdType === 'password'" icon-class="closeeye" />
-          <svg-icon v-else icon-class="openeye" />
+          <svg-icon v-if="pwdType === 'password'" icon-class="closeeye"/>
+          <svg-icon v-else icon-class="openeye"/>
         </span>
       </el-form-item>
       <el-form-item>
@@ -34,7 +34,7 @@
       </el-form-item>
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
+        <span>password: admin</span>
       </div>
     </el-form>
   </div>

@@ -1,5 +1,5 @@
 import store from './store'
-import NProgress from 'nprogress' // Progress 进度条
+import NProgress from 'nprogress' // Progress
 import { getToken } from '@/utils/auth'
 import { router } from './router'
 
@@ -16,13 +16,13 @@ function hasPermission(roles, route) {
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  // 如果获取到 token 信息
+  // if contain token information
   if (getToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
-      // 如果已经登录
+      // if has login
       if (to.meta && to.meta.role) {
         console.log(to.meta)
       }
@@ -39,21 +39,21 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           })
-          // 如果有权限
+          // if have permission
           if (hasPermission(store.getters.roles, to)) {
             next()
           } else {
             next(`/login`)
           }
         })
-        // 未捕获异常
+        // here will be catch exception if have other problem
       }
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/login`) // 否则全部重定向到登录页
+      next(`/login`) // redirect to login page
       // next(`/facede`) // 否则全部重定向到前端
       NProgress.done()
     }

@@ -71,11 +71,11 @@ export const asyncRouterMap = [
     meta: { role: ['ROLE_ADMIN'], title: '用户管理', icon: 'user' },
     children: [
       {
-        path: '/kkkk',
-        component: () => import('@/views/admin/home'),
+        path: 'userInfo',
+        component: () => import('@/views/admin/user'),
         hidden: false,
-        name: '权限测试页',
-        meta: { role: ['ROLE_ADMIN'], title: 'haha' }
+        name: '信息维护',
+        meta: { role: ['ROLE_ADMIN'], title: '信息维护' }
       },
       {
         path: '/kkk2k',
