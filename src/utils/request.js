@@ -41,21 +41,26 @@ service.interceptors.response.use(
       if (res.status === 2006) {
         MessageBox.confirm('验证错误，' + res.message, '确定登出', {
           confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          showCancelButton: false,
           type: 'warning'
-        }).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload() // avoid bug reinstantiation vue-router object
+        })
+          .then(() => {
+            store.dispatch('FedLogOut').then(() => {
+              location.reload() // avoid bug reinstantiation vue-router object
+            })
           })
+          .catch(error => {
+            console.log(error)
+          })
+        return Promise.reject(res.message)
+      } else {
+        // alert error message
+        Message({
+          message: res.message,
+          type: 'error',
+          duration: 5 * 1000
         })
       }
-      // alert error message
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(res.message)
     } else {
       return response
     }
@@ -66,9 +71,6 @@ service.interceptors.response.use(
       message: error.message,
       type: 'error',
       duration: 5 * 1000
-    })
-    store.dispatch('FedLogOut').then(() => {
-      location.reload() // avoid bug reinstantiation vue-router object
     })
   }
 )

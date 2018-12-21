@@ -1,6 +1,5 @@
 import store from './store'
 import NProgress from 'nprogress' // Progress
-import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import { router } from './router'
 
@@ -50,12 +49,9 @@ router.beforeEach((to, from, next) => {
             }
           })
           .catch(error => {
-            store.dispatch('FedLogOut').then(() => {
-              Message.error(error || 'Verification failed, please login again')
-              next({ path: '/' })
-            })
+            return Promise.reject(error)
           })
-        // here will be catch exception if have other problem
+        // here will be catch exception if have other problems
       }
     }
   } else {

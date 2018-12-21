@@ -5,7 +5,7 @@ export function login(username, password) {
 }
 
 export function getInfo(token) {
-  return http.getRequest('sys/login')
+  return http.getRequest('sys/userInfo')
 }
 
 export function logOut() {
