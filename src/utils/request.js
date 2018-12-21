@@ -37,8 +37,8 @@ service.interceptors.response.use(
      * if status not equals with 2000, That it`s error
      */
     if (res.status !== 2000) {
-      // 2005: invalidation token;
-      if (res.status === 2005) {
+      // 2006: invalidation token;
+      if (res.status === 2006) {
         MessageBox.confirm('验证错误，' + res.message, '确定登出', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
