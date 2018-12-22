@@ -1,5 +1,5 @@
 <template>
-  <div class="facede-container">
+  <div>
     <nav-header/>
     {{ msg }}
   </div>
@@ -7,7 +7,7 @@
 <script>
 import { NavHeader } from './components'
 export default {
-  name: 'Facede',
+  name: 'Client',
   components: { NavHeader },
   data() {
     return {
@@ -16,10 +16,5 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.facede-container {
-  background: rgb(238, 243, 228);
-  height: 100%;
-  width: 100%;
-}
+<style lang="scss">
 </style>

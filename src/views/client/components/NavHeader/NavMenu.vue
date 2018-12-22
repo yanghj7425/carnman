@@ -2,11 +2,14 @@
   <div class="nav-menu">
     <img :src="logoImg" class="logo-box">
     <div class="title-box">
-      <span style="font-size:35px">
-        XX居
-      </span>
+      <span style="font-size:35px">XX居</span>
     </div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo menu-box" mode="horizontal" @select="handleSelect">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo menu-box"
+      mode="horizontal"
+      @select="handleSelect"
+    >
       <el-menu-item index="1">处理中心</el-menu-item>
       <el-submenu index="2">
         <template slot="title">我的工作台</template>
@@ -21,7 +24,9 @@
         </el-submenu>
       </el-submenu>
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
-      <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+      <el-menu-item index="4">
+        <a href="https://www.ele.me" target="_blank">订单管理</a>
+      </el-menu-item>
     </el-menu>
     <div class="line"/>
   </div>
@@ -32,7 +37,7 @@ export default {
   name: 'NavMenu',
   data() {
     return {
-      logoImg: require('@/assets/facede/logo.gif'),
+      logoImg: require('@/assets/client/logo.png'),
       activeIndex: '1',
       activeIndex2: '1'
     }

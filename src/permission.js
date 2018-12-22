@@ -3,7 +3,7 @@ import NProgress from 'nprogress' // Progress
 import { getToken } from '@/utils/auth'
 import { router } from './router'
 
-const whiteList = ['/login', '/facede']
+const whiteList = ['/login', '/client']
 
 function hasPermission(roles, route) {
   if (roles.indexOf('admin') >= 0) return true
@@ -58,8 +58,8 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/login`) // redirect to login page
-      // next(`/facede`) // 否则全部重定向到前端
+      // next(`/login`) // redirect to login page
+      next(`/client`) // 否则全部重定向到前端
       NProgress.done()
     }
   }

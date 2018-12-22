@@ -47,12 +47,10 @@ export const constantRouterMap = [
     component: () => import('@/views/admin/login/index'),
     hidden: true
   },
-  // 后台路由结束
-  // 签到台路由开始
   {
-    path: '/facede',
-    name: 'Facede',
-    component: () => import('@/views/facede/index')
+    path: '/client',
+    name: 'client',
+    component: () => import('@/views/client/index')
   }
 ]
 
