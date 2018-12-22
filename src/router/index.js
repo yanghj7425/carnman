@@ -64,24 +64,22 @@ export const router = new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/user',
+    path: '/sys',
     component: Admin,
-    name: '用户管理',
+    name: '信息维护',
     hidden: false,
-    meta: { role: ['ROLE_DBA'], title: '用户管理', icon: 'user' },
+    meta: { role: ['ROLE_ADMIN'], title: '信息维护', icon: 'user' },
     children: [
       {
         path: 'userInfo',
         component: () => import('@/views/admin/user'),
         hidden: false,
-        name: '信息维护',
-        meta: { role: ['ROLE_DBA'], title: '信息维护' }
+        meta: { role: ['ROLE_USER', 'ROLE_ADMIN'], title: '用户信息' }
       },
       {
-        path: '/kkk2k',
-        component: () => import('@/views/admin/home'),
-        name: '权限测试页1',
-        meta: { role: ['ROLE_ADMIN'], title: 'wowo' }
+        path: 'resInfo',
+        component: () => import('@/views/admin/resource'),
+        meta: { role: ['ROLE_ADMIN'], title: '资源信息' }
       }
     ]
   },

@@ -1,4 +1,4 @@
-import { login, logOut, getInfo } from '@/api/login'
+import { login, logOut, getInfo } from '@/api/admin/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {

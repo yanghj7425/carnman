@@ -39,11 +39,15 @@ service.interceptors.response.use(
     if (res.status !== 2000) {
       // 2006: invalidation token;
       if (res.status === 2006) {
-        MessageBox.confirm('验证错误，' + res.message, '确定登出', {
-          confirmButtonText: '确定',
-          showCancelButton: false,
-          type: 'warning'
-        })
+        MessageBox.confirm(
+          '验证错误，' + res.message + ', 取消则停留在该页',
+          '确定登出',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        )
           .then(() => {
             store.dispatch('FedLogOut').then(() => {
               location.reload() // avoid bug reinstantiation vue-router object
