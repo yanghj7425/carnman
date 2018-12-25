@@ -58,8 +58,8 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      // next(`/login`) // redirect to login page
-      next(`/client`) // 否则全部重定向到前端
+      next(`/login`) // redirect to login page
+      // next(`/client`) // 否则全部重定向到前端
       NProgress.done()
     }
   }
