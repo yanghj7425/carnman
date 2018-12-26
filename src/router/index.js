@@ -24,32 +24,12 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/disss',
-    name: 'dis1ss',
-    component: Admin,
-    hidden: false,
-    meta: { title: '布局4', icon: 'tree' },
-    children: [
-      {
-        path: 'table1',
-        name: 'Table1',
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tablse1',
-        name: 'Tablse1',
-        meta: { title: 'Table', icon: 'table' }
-      }
-    ]
-  },
-  {
     path: '/login',
     component: () => import('@/views/admin/login/index'),
     hidden: true
   },
   {
     path: '/client',
-    name: 'client',
     component: () => import('@/views/client/index')
   }
 ]
@@ -69,15 +49,15 @@ export const asyncRouterMap = [
     meta: { role: ['ROLE_ADMIN'], title: '信息维护', icon: 'user' },
     children: [
       {
+        path: 'resInfo',
+        component: () => import('@/views/admin/resource'),
+        meta: { role: ['ROLE_ADMIN'], title: '访问控制' }
+      },
+      {
         path: 'userInfo',
         component: () => import('@/views/admin/user'),
         hidden: false,
         meta: { role: ['ROLE_USER', 'ROLE_ADMIN'], title: '用户信息' }
-      },
-      {
-        path: 'resInfo',
-        component: () => import('@/views/admin/resource'),
-        meta: { role: ['ROLE_ADMIN'], title: '资源信息' }
       }
     ]
   },

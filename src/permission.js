@@ -23,9 +23,6 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // if has login
-      if (to.meta && to.meta.role) {
-        console.log(to.meta)
-      }
       if (store.getters.roles.length !== 0) {
         if (hasPermission(store.getters.roles, router.options.routes)) {
           next()
