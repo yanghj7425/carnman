@@ -17,48 +17,58 @@
       </div>
       <!-- resource view end -->
       <!-- role view start -->
-      <div v-if="treeNode.resId" class="right-role">
-        <div class="res-view">
-          <el-form ref="form" :model="treeNode" label-width="80px">
-            <el-form-item label="父级资源">
-              <el-input v-model="treeNode.resfName" :disabled="true"/>
-            </el-form-item>
-            <el-form-item label="本级资源">
-              <el-input v-model="treeNode.resName"/>
-            </el-form-item>
-            <el-form-item label="资源URL">
-              <el-input v-model="treeNode.resUrl"/>
-            </el-form-item>
-            <el-form-item label="是否有效">
-              <el-switch v-model="treeNode.resStatus" active-value="1" inactive-value="0"/>
-            </el-form-item>
-            <el-form-item label="资源描述">
-              <el-input v-model="treeNode.resDesc" type="textarea"/>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmitNewNode">立即创建</el-button>
-              <el-button>取消</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-        <el-button @click="() => append(clickedNode.obj)">添加</el-button>
-        <el-button @click="() => remove(clickedNode.node, clickedNode.obj)">删除</el-button>
-      </div>
-
-      <div>
-        <el-button @click="fetchData()">按钮</el-button>
-        <el-table :data="list" style="width: 80%">
-          <el-table-column prop="roleName" label="角色" width="180"/>
-          <el-table-column prop="resName" label="资源名称" width="180"/>
-          <el-table-column prop="resDesc" label="资源描述" width="180"/>
-          <el-table-column prop="resUrl" label="资源URL" width="180"/>
-          <el-table-column fixed="right">
-            <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <div class="right-role">
+        <el-tabs type="border-card">
+          <el-tab-pane>
+            <span slot="label">
+              <i class="el-icon-date"/> 资源维护
+            </span>
+            <div>
+              <div class="res-view">
+                <el-form ref="treeNode" :model="treeNode" :rules="rules" label-width="80px">
+                  <el-form-item label="父级资源">
+                    <el-input v-model="treeNode.resFname" :disabled="true"/>
+                  </el-form-item>
+                  <el-form-item label="本级资源" prop="resName">
+                    <el-input v-model="treeNode.resName"/>
+                  </el-form-item>
+                  <el-form-item label="资源URL" prop="resUrl">
+                    <el-input v-model="treeNode.resUrl"/>
+                  </el-form-item>
+                  <el-form-item label="是否有效">
+                    <el-switch v-model="treeNode.resStatus" active-value="1" inactive-value="0"/>
+                  </el-form-item>
+                  <el-form-item label="资源描述" prop="resDesc">
+                    <el-input v-model="treeNode.resDesc" type="textarea"/>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="onSubmitNewNode('treeNode')">立即创建</el-button>
+                    <el-button>取消</el-button>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <el-button @click="() => append(clickedNode.obj)">添加</el-button>
+              <el-button @click="() => remove(clickedNode.node, clickedNode.obj)">删除</el-button>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="角色信息">
+            <div>
+              <el-button @click="fetchData()">刷新</el-button>
+              <el-table :data="list">
+                <el-table-column prop="roleName" label="角色" width="180"/>
+                <el-table-column prop="resName" label="资源名称" width="100"/>
+                <el-table-column prop="resDesc" label="资源描述" width="180"/>
+                <el-table-column prop="resUrl" label="资源URL" width="180"/>
+                <el-table-column width="180">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
+                    <el-button type="text" size="small">编辑</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
   </div>
@@ -68,6 +78,7 @@ import { Message } from 'element-ui'
 import { queryAllResInfo, createNewResNode } from '@/api/admin/resource'
 export default {
   name: 'Resource',
+
   data() {
     const data = [{
       id: 1,
@@ -112,14 +123,30 @@ export default {
       list: [],
       treeNode: {
         resId: '',
-        resfName: '',
+        resFid: '',
+        resFname: '',
         resName: '',
         resDesc: '',
         resUrl: '',
-        resStatus: false
+        resStatus: 1
+      },
+      rules: {
+        resName: [
+          { required: true, message: '请输入资源名称', trigger: 'change' }
+        ],
+        resUrl: [
+          { required: true, message: '请输入资源URL', trigger: 'change' }
+        ],
+        resDesc: [
+          { required: true, message: '请输入资源描述', trigger: 'change' }
+        ]
+
       },
       dataLoading: true
     }
+  },
+  mounted() {
+    this.fetchData()
   },
   methods: {
     handleClick(data) {
@@ -135,11 +162,14 @@ export default {
       this.$forceUpdate()
       this.clickedNode['obj'] = obj
       this.clickedNode['node'] = node
+
       this.treeNode.resId = obj.id
-      this.treeNode.resfName = obj.label
+      this.treeNode.resName = obj.label
+      this.treeData.resFid = node.parent.data.id
+      this.treeNode.resFname = node.parent.data.label
 
       Message({
-        message: this.treeNode.resfName,
+        message: this.treeNode.resFname,
         type: 'msg',
         duration: 1000 * 1
       })
@@ -177,10 +207,26 @@ export default {
           <span>{node.label}</span>
         </span>)
     },
-    // 保存一个新资源节点
-    onSubmitNewNode() {
-      createNewResNode(this.treeNode).then(response => {
-        console.log(response)
+    // save a resource node
+    onSubmitNewNode(treeNode) {
+      this.$refs[treeNode].validate((valid) => {
+        // fi validate failure return false and interrupt commit
+        if (!valid) {
+          return false
+        }
+        // continue commit node info
+        createNewResNode(this.treeNode).then(response => {
+          Message({
+            type: 'success',
+            message: '添加成功',
+            duration: 1000 * 1
+          })
+        }).catch(() => {
+          Message({
+            type: 'warning',
+            message: '添加失败'
+          })
+        })
       })
     },
     // filter special note
@@ -213,7 +259,6 @@ export default {
     width: 78%;
     height: 100%;
     float: right;
-
     .res-view {
       width: 48%;
       background-color: blanchedalmond;
