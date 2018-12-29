@@ -1,12 +1,32 @@
 import http from '@/utils/request'
 
 /**
- * @description 查询左侧资源树
+ * @description query left tree node information
  */
-export function queryAllResInfo() {
+function queryResTree() {
   return http.getRequest('res/resTree')
 }
 
-export function createNewResNode(treeNode) {
-  return http.postRequest('res/addRes', treeNode)
+/**
+ * @description create a new tree node after the checked node
+ * @param { tree node information } treeNode
+ */
+function createNewTreeNode(treeNode) {
+  return http.postRequest('res/addResNode', treeNode)
 }
+
+/**
+ * @description update a resource node information
+ * @param {tree node information} treeNode
+ */
+function updateTreeNode(treeNode) {
+  return http.postRequest('res/updateResNode', treeNode)
+}
+
+const Resource = {
+  queryResTree,
+  createNewTreeNode,
+  updateTreeNode
+}
+
+export default Resource

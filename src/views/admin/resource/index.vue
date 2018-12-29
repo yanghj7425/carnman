@@ -29,8 +29,8 @@
                   <el-form-item label="父级资源">
                     <el-input v-model="treeNode.resFname" :disabled="true"/>
                   </el-form-item>
-                  <el-form-item label="本级资源" prop="resName">
-                    <el-input v-model="treeNode.resName"/>
+                  <el-form-item label="本级资源" prop="label">
+                    <el-input v-model="treeNode.label"/>
                   </el-form-item>
                   <el-form-item label="资源URL" prop="resUrl">
                     <el-input v-model="treeNode.resUrl"/>
@@ -42,8 +42,8 @@
                     <el-input v-model="treeNode.resDesc" type="textarea"/>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="onSubmitNewNode('treeNode')">立即创建</el-button>
-                    <el-button>取消</el-button>
+                    <el-button type="primary" @click="onSubmitSaveNode('treeNode','insert')">新增</el-button>
+                    <el-button @click="onSubmitSaveNode('treeNode','update')">修改</el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -53,7 +53,7 @@
           </el-tab-pane>
           <el-tab-pane label="角色信息">
             <div>
-              <el-button @click="fetchData()">刷新</el-button>
+              <el-button @click="fetchTreeData()">刷新</el-button>
               <el-table :data="list">
                 <el-table-column prop="roleName" label="角色" width="180"/>
                 <el-table-column prop="resName" label="资源名称" width="100"/>
@@ -75,63 +75,28 @@
 </template>
 <script>
 import { Message } from 'element-ui'
-import { queryAllResInfo, createNewResNode } from '@/api/admin/resource'
+import Resource from '@/api/admin/resource'
 export default {
   name: 'Resource',
 
   data() {
-    const data = [{
-      id: 1,
-      label: '一级 1',
-      children: [{
-        id: 4,
-        label: '二级 1-1',
-        children: [{
-          id: 9,
-          label: '三级 1-1-1'
-        }, {
-          id: 10,
-          label: '三级 1-1-2'
-        }]
-      }]
-    }, {
-      id: 2,
-      label: '一级 2',
-      children: [{
-        id: 5,
-        label: '二级 2-1'
-      }, {
-        id: 6,
-        label: '二级 2-2'
-      }]
-    }, {
-      id: 3,
-      label: '一级 3',
-      children: [{
-        id: 7,
-        label: '二级 3-1'
-      }, {
-        id: 8,
-        label: '二级 3-2'
-      }]
-    }]
     return {
-      treeData: JSON.parse(JSON.stringify(data)),
+      treeData: [],
       clickedNode: {},
       id: 1000,
       filterText: '',
       list: [],
       treeNode: {
-        resId: '',
-        resFid: '',
-        resFname: '',
-        resName: '',
-        resDesc: '',
+        id: '',
+        label: '',
         resUrl: '',
-        resStatus: 1
+        resDesc: '',
+        resStatus: 1,
+        resFid: '',
+        resFname: ''
       },
       rules: {
-        resName: [
+        label: [
           { required: true, message: '请输入资源名称', trigger: 'change' }
         ],
         resUrl: [
@@ -146,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchData()
+    this.fetchTreeData()
   },
   methods: {
     handleClick(data) {
@@ -162,14 +127,15 @@ export default {
       this.$forceUpdate()
       this.clickedNode['obj'] = obj
       this.clickedNode['node'] = node
-
-      this.treeNode.resId = obj.id
-      this.treeNode.resName = obj.label
-      this.treeData.resFid = node.parent.data.id
+      this.treeNode.id = obj.id
+      this.treeNode.label = obj.label
+      this.treeNode.resUrl = obj.resUrl
+      this.treeNode.resDesc = obj.resDesc
+      this.treeNode.resFid = node.parent.data.id
       this.treeNode.resFname = node.parent.data.label
 
       Message({
-        message: this.treeNode.resFname,
+        message: JSON.stringify(this.treeNode),
         type: 'msg',
         duration: 1000 * 1
       })
@@ -208,37 +174,42 @@ export default {
         </span>)
     },
     // save a resource node
-    onSubmitNewNode(treeNode) {
+    onSubmitSaveNode(treeNode, option) {
       this.$refs[treeNode].validate((valid) => {
         // fi validate failure return false and interrupt commit
         if (!valid) {
           return false
         }
         // continue commit node info
-        createNewResNode(this.treeNode).then(response => {
-          Message({
-            type: 'success',
-            message: '添加成功',
-            duration: 1000 * 1
+        if (option === 'insert') { // add new tree node
+          Resource.createNewTreeNode(this.treeNode).then(response => {
+            Message({
+              type: 'success',
+              message: '添加成功',
+              duration: 1000 * 1
+            })
+          }).catch(() => {
+            Message({
+              type: 'warning',
+              message: '添加失败'
+            })
           })
-        }).catch(() => {
-          Message({
-            type: 'warning',
-            message: '添加失败'
-          })
-        })
+        } else if (option === 'update') {
+          console.log('s')
+        }
       })
     },
+
     // filter special note
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
 
-    fetchData() {
-      queryAllResInfo().then(response => {
-        this.list = response.data.list
-        console.log(this.list)
+    fetchTreeData() {
+      Resource.queryResTree().then(response => {
+        this.treeData = JSON.stringify(response.data.tree)
+        console.log(this.treeData)
       }).catch(error => {
         console.log(error) // for debug
       })
