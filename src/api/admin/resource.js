@@ -12,7 +12,7 @@ function queryResTree() {
  * @param { tree node information } treeNode
  */
 function createNewTreeNode(treeNode) {
-  return http.postRequest('res/addResNode', treeNode)
+  return http.postRequest('res/addRes', treeNode)
 }
 
 /**
@@ -20,7 +20,7 @@ function createNewTreeNode(treeNode) {
  * @param {tree node information} treeNode
  */
 function updateTreeNode(treeNode) {
-  return http.postRequest('res/updateResNode', treeNode)
+  return http.postRequest('res/updateRes', treeNode)
 }
 
 const Resource = {

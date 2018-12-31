@@ -26,6 +26,16 @@
             <div>
               <div class="res-view">
                 <el-form ref="treeNode" :model="treeNode" :rules="rules" label-width="80px">
+                  <el-form-item label="操作类型">
+                    <el-radio-group
+                      v-model="option"
+                      :disabled="isDisableOption"
+                      @change="optionChange"
+                    >
+                      <el-radio label="insert">新增</el-radio>
+                      <el-radio label="update">修改</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
                   <el-form-item label="父级资源">
                     <el-input v-model="treeNode.resFname" :disabled="true"/>
                   </el-form-item>
@@ -42,8 +52,7 @@
                     <el-input v-model="treeNode.resDesc" type="textarea"/>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="onSubmitSaveNode('treeNode','insert')">新增</el-button>
-                    <el-button @click="onSubmitSaveNode('treeNode','update')">修改</el-button>
+                    <el-button type="primary" @click="onSubmitSaveNode('treeNode',option)">保存</el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -56,7 +65,7 @@
               <el-button @click="fetchTreeData()">刷新</el-button>
               <el-table :data="list">
                 <el-table-column prop="roleName" label="角色" width="180"/>
-                <el-table-column prop="resName" label="资源名称" width="100"/>
+                <el-table-column prop="label" label="资源名称" width="100"/>
                 <el-table-column prop="resDesc" label="资源描述" width="180"/>
                 <el-table-column prop="resUrl" label="资源URL" width="180"/>
                 <el-table-column width="180">
@@ -81,10 +90,11 @@ export default {
 
   data() {
     return {
-      treeData: [],
+      treeData: [], // left tree`s data array
       clickedNode: {},
-      id: 1000,
-      filterText: '',
+      filterText: '', // The node`s name of the tree,want to filter
+      option: 'insert', // which option you want to do, insert or update.default value is insert
+      isDisableOption: false, // the signal of whether disable radio group
       list: [],
       treeNode: {
         id: '',
@@ -93,6 +103,7 @@ export default {
         resDesc: '',
         resStatus: 1,
         resFid: '',
+        resType: 'URL',
         resFname: ''
       },
       rules: {
@@ -114,8 +125,13 @@ export default {
     this.fetchTreeData()
   },
   methods: {
-    handleClick(data) {
-      console.log(data)
+    optionChange(option) {
+      if (option === 'insert') {
+        this.treeNode.resFid = this.treeNode.id
+      } else if (option === 'update') {
+        console.log('update')
+      }
+      this.isDisableOption = true
     },
 
     /** ***************************************/
@@ -123,16 +139,20 @@ export default {
     /** ***************************************/
 
     // The resource-tree check event
-    clickNodeCallBack(obj, node, _this) {
+    clickNodeCallBack(data, node, _this) {
       this.$forceUpdate()
-      this.clickedNode['obj'] = obj
+      this.clickedNode['obj'] = data
       this.clickedNode['node'] = node
-      this.treeNode.id = obj.id
-      this.treeNode.label = obj.label
-      this.treeNode.resUrl = obj.resUrl
-      this.treeNode.resDesc = obj.resDesc
-      this.treeNode.resFid = node.parent.data.id
-      this.treeNode.resFname = node.parent.data.label
+
+      const option = this.option
+      if (option === 'insert') {
+        this.treeNode.resFid = data.id
+        this.treeNode.resFname = data.label
+      } else {
+        this.treeNode = data
+        this.treeNode.resFid = node.parent.data.id || 0
+        this.treeNode.resFname = node.parent.data.label || ''
+      }
 
       Message({
         message: JSON.stringify(this.treeNode),
@@ -143,7 +163,7 @@ export default {
 
     // add a tree node
     append(data) {
-      const newChild = { id: this.id++, label: 'testTree', children: [] }
+      const newChild = { id: data.KEY, label: data.label, children: [] }
       if (!data.children) {
         this.$set(data, 'children', [])
       }
@@ -182,7 +202,12 @@ export default {
         }
         // continue commit node info
         if (option === 'insert') { // add new tree node
-          Resource.createNewTreeNode(this.treeNode).then(response => {
+          // if option is insert we put the selected node`s id as fid then insert a record
+          const node = this.treeNode
+          Resource.createNewTreeNode(node).then(response => {
+            node.id = response.data.Key
+            // append new a new sub node on selected tree`s node
+            this.append(node)
             Message({
               type: 'success',
               message: '添加成功',
@@ -195,7 +220,16 @@ export default {
             })
           })
         } else if (option === 'update') {
-          console.log('s')
+          const node = this.treeNode
+          Resource.updateTreeNode(node).then(response => {
+            // refresh tree info
+            this.clickedNode.obj = node
+            Message({
+              type: 'success',
+              message: '修改成功',
+              duration: 1000 * 1
+            })
+          })
         }
       })
     },
@@ -208,7 +242,7 @@ export default {
 
     fetchTreeData() {
       Resource.queryResTree().then(response => {
-        this.treeData = JSON.stringify(response.data.tree)
+        this.treeData = response.data.tree
         console.log(this.treeData)
       }).catch(error => {
         console.log(error) // for debug
