@@ -23,10 +23,18 @@ function updateTreeNode(treeNode) {
   return http.postRequest('res/updateRes', treeNode)
 }
 
+/**
+ *@description query the table of sys_role information
+ */
+function querySysRoles() {
+  return http.getRequest('sys/roles')
+}
+
 const Resource = {
   queryResTree,
   createNewTreeNode,
-  updateTreeNode
+  updateTreeNode,
+  querySysRoles
 }
 
 export default Resource

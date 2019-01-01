@@ -18,49 +18,8 @@
       <!-- resource view end -->
       <!-- role view start -->
       <div class="right-role">
-        <el-tabs type="border-card">
-          <el-tab-pane>
-            <span slot="label">
-              <i class="el-icon-date"/> 资源维护
-            </span>
-            <div>
-              <div class="res-view">
-                <el-form ref="treeNode" :model="treeNode" :rules="rules" label-width="80px">
-                  <el-form-item label="操作类型">
-                    <el-radio-group
-                      v-model="option"
-                      :disabled="isDisableOption"
-                      @change="optionChange"
-                    >
-                      <el-radio label="insert">新增</el-radio>
-                      <el-radio label="update">修改</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="父级资源">
-                    <el-input v-model="treeNode.resFname" :disabled="true"/>
-                  </el-form-item>
-                  <el-form-item label="本级资源" prop="label">
-                    <el-input v-model="treeNode.label"/>
-                  </el-form-item>
-                  <el-form-item label="资源URL" prop="resUrl">
-                    <el-input v-model="treeNode.resUrl"/>
-                  </el-form-item>
-                  <el-form-item label="是否有效">
-                    <el-switch v-model="treeNode.resStatus" active-value="1" inactive-value="0"/>
-                  </el-form-item>
-                  <el-form-item label="资源描述" prop="resDesc">
-                    <el-input v-model="treeNode.resDesc" type="textarea"/>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="onSubmitSaveNode('treeNode',option)">保存</el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-              <el-button @click="() => append(clickedNode.obj)">添加</el-button>
-              <el-button @click="() => remove(clickedNode.node, clickedNode.obj)">删除</el-button>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="角色信息">
+        <el-tabs type="border-card" @tab-click="tabClick">
+          <el-tab-pane label="资源详情">
             <div>
               <el-button @click="fetchTreeData()">刷新</el-button>
               <el-table :data="list">
@@ -75,6 +34,57 @@
                   </template>
                 </el-table-column>
               </el-table>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane>
+            <span slot="label">
+              <i class="el-icon-date"/> 资源维护
+            </span>
+            <div>
+              <div class="res-view">
+                <div class="res-info">
+                  <el-form ref="treeNode" :model="treeNode" :rules="rules" label-width="80px">
+                    <el-form-item label="操作类型">
+                      <el-radio-group
+                        v-model="option"
+                        :disabled="isDisableOption"
+                        @change="optionChange"
+                      >
+                        <el-radio label="insert">新增</el-radio>
+                        <el-radio label="update">修改</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="父级资源">
+                      <el-input v-model="treeNode.resFname" :disabled="true"/>
+                    </el-form-item>
+                    <el-form-item label="本级资源" prop="label">
+                      <el-input v-model="treeNode.label"/>
+                    </el-form-item>
+                    <el-form-item label="资源URL" prop="resUrl">
+                      <el-input v-model="treeNode.resUrl"/>
+                    </el-form-item>
+                    <el-form-item label="是否有效">
+                      <el-switch v-model="treeNode.resStatus" active-value="1" inactive-value="0"/>
+                    </el-form-item>
+                    <el-form-item label="资源描述" prop="resDesc">
+                      <el-input v-model="treeNode.resDesc" type="textarea"/>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="onSubmitSaveNode('treeNode',option)">保存</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </div>
+              <el-button @click="() => append(clickedNode.obj)">添加</el-button>
+              <el-button @click="() => remove(clickedNode.node, clickedNode.obj)">删除</el-button>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane>
+            <span slot="label">
+              <i class="el-icon-date"/> 角色分配
+            </span>
+            <div class="res-role">
+              <el-transfer v-model="resRoles" :data="sysRoles" :titles="['所有角色', '可访问角色']"/>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -96,6 +106,8 @@ export default {
       option: 'insert', // which option you want to do, insert or update.default value is insert
       isDisableOption: false, // the signal of whether disable radio group
       list: [],
+      sysRoles: [], // sysRoles list
+      resRoles: [], // whiche resource can access
       treeNode: {
         id: '',
         label: '',
@@ -116,7 +128,6 @@ export default {
         resDesc: [
           { required: true, message: '请输入资源描述', trigger: 'change' }
         ]
-
       },
       dataLoading: true
     }
@@ -125,6 +136,22 @@ export default {
     this.fetchTreeData()
   },
   methods: {
+    tabClick(tab) {
+      const paneName = tab.paneName
+      if (paneName === '2') {
+        Resource.querySysRoles().then(response => {
+          const roles = response.data.roles
+          roles.forEach((role, index) => {
+            this.sysRoles.push({
+              label: role.roleDesc,
+              key: role.id
+            })
+          })
+        })
+      }
+    },
+
+    // resource information update style
     optionChange(option) {
       if (option === 'insert') {
         this.treeNode.resFid = this.treeNode.id
@@ -148,7 +175,7 @@ export default {
       if (option === 'insert') {
         this.treeNode.resFid = data.id
         this.treeNode.resFname = data.label
-      } else {
+      } else if (option === 'update') {
         this.treeNode = data
         this.treeNode.resFid = node.parent.data.id || 0
         this.treeNode.resFname = node.parent.data.label || ''
@@ -265,8 +292,16 @@ export default {
     height: 100%;
     float: right;
     .res-view {
-      width: 48%;
+      width: 100%;
       background-color: blanchedalmond;
+      .res-info {
+        width: 45%;
+        float: left;
+      }
+      .res-role {
+        width: 45%;
+        float: right;
+      }
     }
   }
 }
