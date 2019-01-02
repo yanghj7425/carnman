@@ -138,7 +138,7 @@ export default {
   methods: {
     tabClick(tab) {
       const paneName = tab.paneName
-      if (paneName === '2') {
+      if (paneName === '2' && this.sysRoles.length === 0) {
         Resource.querySysRoles().then(response => {
           const roles = response.data.roles
           roles.forEach((role, index) => {
@@ -223,14 +223,20 @@ export default {
     // save a resource node
     onSubmitSaveNode(treeNode, option) {
       this.$refs[treeNode].validate((valid) => {
-        // fi validate failure return false and interrupt commit
+        // if validate failure return false and interrupt commit
         if (!valid) {
           return false
         }
+        // deep copy the treeNode that you want to save
+        const node = Object.assign({}, this.treeNode)
+
+        // remove children property to avoid server`s pojo convertor exception
+        delete node.children
+
         // continue commit node info
         if (option === 'insert') { // add new tree node
           // if option is insert we put the selected node`s id as fid then insert a record
-          const node = this.treeNode
+
           Resource.createNewTreeNode(node).then(response => {
             node.id = response.data.Key
             // append new a new sub node on selected tree`s node
@@ -247,7 +253,6 @@ export default {
             })
           })
         } else if (option === 'update') {
-          const node = this.treeNode
           Resource.updateTreeNode(node).then(response => {
             // refresh tree info
             this.clickedNode.obj = node
