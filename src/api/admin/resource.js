@@ -24,6 +24,15 @@ function updateTreeNode(treeNode) {
 }
 
 /**
+ *
+ * @param {The ID of the assigned resource} resId
+ * @param {*} roleIds
+ */
+function assignResRole(resId, roleIds) {
+  return http.postRequest('res/addRoles', { resId, roleIds })
+}
+
+/**
  *@description query the table of sys_role information
  */
 function querySysRoles() {
@@ -34,7 +43,8 @@ const Resource = {
   queryResTree,
   createNewTreeNode,
   updateTreeNode,
-  querySysRoles
+  querySysRoles,
+  assignResRole
 }
 
 export default Resource
