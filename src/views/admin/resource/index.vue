@@ -3,7 +3,7 @@
     <div class="access-container">
       <!-- resource view start -->
       <div class="left-tree">
-        <el-input v-model="filterText" placeholder="输入关键字进行过滤"/>
+        <el-input v-model="filterNodeName" placeholder="输入关键字进行过滤"/>
         <el-tree
           ref="rTree"
           :data="treeData"
@@ -84,7 +84,8 @@
               <i class="el-icon-date"/> 角色分配
             </span>
             <div class="res-role">
-              <el-transfer v-model="resRoles" :data="sysRoles" :titles="['所有角色', '可访问角色']"/>
+              <el-transfer v-model="resRoles" :data="sysRoles" :titles="['可分配角色', '可访问角色']"/>
+              <el-button @click="() => saveAssignResourceRole()">保存</el-button>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -102,12 +103,12 @@ export default {
     return {
       treeData: [], // left tree`s data array
       clickedNode: {},
-      filterText: '', // The node`s name of the tree,want to filter
+      filterNodeName: '', // The node`s name of the tree,want to filter
       option: 'insert', // which option you want to do, insert or update.default value is insert
       isDisableOption: false, // the signal of whether disable radio group
       list: [],
       sysRoles: [], // sysRoles list
-      resRoles: [], // whiche resource can access
+      resRoles: [1, 2, 3], // whiche resource can access
       treeNode: {
         id: '',
         label: '',
@@ -133,11 +134,24 @@ export default {
     }
   },
   mounted() {
+    // loading tree info
     this.fetchTreeData()
   },
   methods: {
+    /**
+     *Assign resources to a selected role
+     */
+    saveAssignResourceRole() {
+      console.log(this.resRoles)
+      console.log(this.treeNode)
+    },
+
+    /**
+     * click tab callback
+     */
     tabClick(tab) {
       const paneName = tab.paneName
+      // if clicked tab is role`s tab and that the length id zero
       if (paneName === '2' && this.sysRoles.length === 0) {
         Resource.querySysRoles().then(response => {
           const roles = response.data.roles
@@ -156,7 +170,7 @@ export default {
       if (option === 'insert') {
         this.treeNode.resFid = this.treeNode.id
       } else if (option === 'update') {
-        console.log('update')
+        if (this.clickedNode.obj) { this.treeNode = this.clickedNode.obj }
       }
       this.isDisableOption = true
     },
@@ -168,8 +182,16 @@ export default {
     // The resource-tree check event
     clickNodeCallBack(data, node, _this) {
       this.$forceUpdate()
+
       this.clickedNode['obj'] = data
       this.clickedNode['node'] = node
+
+      // for debug
+      Message({
+        message: JSON.stringify(data),
+        type: 'msg',
+        duration: 1000 * 1
+      })
 
       const option = this.option
       if (option === 'insert') {
@@ -180,12 +202,6 @@ export default {
         this.treeNode.resFid = node.parent.data.id || 0
         this.treeNode.resFname = node.parent.data.label || ''
       }
-
-      Message({
-        message: JSON.stringify(this.treeNode),
-        type: 'msg',
-        duration: 1000 * 1
-      })
     },
 
     // add a tree node
@@ -236,7 +252,6 @@ export default {
         // continue commit node info
         if (option === 'insert') { // add new tree node
           // if option is insert we put the selected node`s id as fid then insert a record
-
           Resource.createNewTreeNode(node).then(response => {
             node.id = response.data.Key
             // append new a new sub node on selected tree`s node

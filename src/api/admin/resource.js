@@ -27,7 +27,7 @@ function updateTreeNode(treeNode) {
  *@description query the table of sys_role information
  */
 function querySysRoles() {
-  return http.getRequest('sys/roles')
+  return http.getRequest('user/roles')
 }
 
 const Resource = {

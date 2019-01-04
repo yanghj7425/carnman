@@ -94,10 +94,7 @@ const postRequest = (url, params) => {
         }
         return ret
       }
-    ],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    ]
   })
 }
 
@@ -125,10 +122,7 @@ const putRequest = (url, params) => {
         }
         return ret
       }
-    ],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    ]
   })
 }
 
