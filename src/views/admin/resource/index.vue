@@ -18,8 +18,8 @@
       <!-- resource view end -->
       <!-- role view start -->
       <div class="right-role">
-        <el-tabs type="border-card" @tab-click="tabClick">
-          <el-tab-pane label="资源详情">
+        <el-tabs v-model="activeTab" type="border-card" @tab-click="tabClick">
+          <el-tab-pane label="资源详情" name="resDetail">
             <div>
               <el-button @click="fetchTreeData()">刷新</el-button>
               <el-table :data="list">
@@ -36,7 +36,7 @@
               </el-table>
             </div>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="resMaintenance">
             <span slot="label">
               <i class="el-icon-date"/> 资源维护
             </span>
@@ -79,12 +79,12 @@
               <el-button @click="() => remove(clickedNode.node, clickedNode.obj)">删除</el-button>
             </div>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="roleAssign">
             <span slot="label">
               <i class="el-icon-date"/> 角色分配
             </span>
             <div class="res-role">
-              <el-transfer v-model="resRoles" :data="sysRoles" :titles="['可分配角色', '可访问角色']"/>
+              <el-transfer v-model="resRoleIds" :data="sysRoleIds" :titles="['可分配角色', '可访问角色']"/>
               <el-button @click="() => saveAssignResourceRole()">保存</el-button>
             </div>
           </el-tab-pane>
@@ -107,8 +107,9 @@ export default {
       option: 'insert', // which option you want to do, insert or update.default value is insert
       isDisableOption: false, // the signal of whether disable radio group
       list: [],
-      sysRoles: [], // sysRoles list
-      resRoles: [1, 2, 3], // whiche resource can access
+      sysRoleIds: [], // sysRoles list
+      resRoleIds: [], // whiche resource can access
+      activeTab: '',
       treeNode: {
         id: '',
         label: '',
@@ -142,21 +143,26 @@ export default {
      *Assign resources to a selected role
      */
     saveAssignResourceRole() {
-      console.log(this.resRoles)
-      console.log(this.treeNode)
+      console.log(this.resRoleIds)
+      const roleIds = this.resRoleIds
+      const resId = this.clickedNode.obj.id
+      Resource.assignResRole(resId, roleIds).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     },
 
     /**
      * click tab callback
      */
     tabClick(tab) {
-      const paneName = tab.paneName
       // if clicked tab is role`s tab and that the length id zero
-      if (paneName === '2' && this.sysRoles.length === 0) {
+      if (this.activeTab === 'roleAssign' && this.sysRoleIds.length === 0) {
         Resource.querySysRoles().then(response => {
           const roles = response.data.roles
           roles.forEach((role, index) => {
-            this.sysRoles.push({
+            this.sysRoleIds.push({
               label: role.roleDesc,
               key: role.id
             })
@@ -188,9 +194,18 @@ export default {
 
       // for debug
       Message({
-        message: JSON.stringify(data),
+        message: JSON.stringify(data.id),
         type: 'msg',
         duration: 1000 * 1
+      })
+
+      // query resource has been assigned roles
+      Resource.queryResAssignedRole(data.id).then(response => {
+        if (response && response.data) {
+          this.resRoleIds = response.data.roleIds
+        }
+      }).catch(error => {
+        console.log(error)
       })
 
       const option = this.option
@@ -276,6 +291,8 @@ export default {
               message: '修改成功',
               duration: 1000 * 1
             })
+          }).catch(error => {
+            console.log(error)
           })
         }
       })
