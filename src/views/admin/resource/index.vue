@@ -19,23 +19,6 @@
       <!-- role view start -->
       <div class="right-role">
         <el-tabs v-model="activeTab" type="border-card" @tab-click="tabClick">
-          <el-tab-pane label="资源详情" name="resDetail">
-            <div>
-              <el-button @click="fetchTreeData()">刷新</el-button>
-              <el-table :data="list">
-                <el-table-column prop="roleName" label="角色" width="180"/>
-                <el-table-column prop="label" label="资源名称" width="100"/>
-                <el-table-column prop="resDesc" label="资源描述" width="180"/>
-                <el-table-column prop="resUrl" label="资源URL" width="180"/>
-                <el-table-column width="180">
-                  <template slot-scope="scope">
-                    <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-tab-pane>
           <el-tab-pane name="resMaintenance">
             <span slot="label">
               <i class="el-icon-date"/> 资源维护
@@ -52,6 +35,7 @@
                       >
                         <el-radio label="insert">新增</el-radio>
                         <el-radio label="update">修改</el-radio>
+                        <el-radio label="delete">删除</el-radio>
                       </el-radio-group>
                     </el-form-item>
                     <el-form-item label="父级资源">
@@ -104,12 +88,12 @@ export default {
       treeData: [], // left tree`s data array
       clickedNode: {},
       filterNodeName: '', // The node`s name of the tree,want to filter
-      option: 'insert', // which option you want to do, insert or update.default value is insert
+      option: 'update', // which option you want to do, insert or update.default value is insert
       isDisableOption: false, // the signal of whether disable radio group
       list: [],
       sysRoleIds: [], // sysRoles list
       resRoleIds: [], // whiche resource can access
-      activeTab: '',
+      activeTab: 'resMaintenance',
       treeNode: {
         id: '',
         label: '',
@@ -175,7 +159,7 @@ export default {
     optionChange(option) {
       if (option === 'insert') {
         this.treeNode.resFid = this.treeNode.id
-      } else if (option === 'update') {
+      } else {
         if (this.clickedNode.obj) { this.treeNode = this.clickedNode.obj }
       }
       this.isDisableOption = true
@@ -294,6 +278,8 @@ export default {
           }).catch(error => {
             console.log(error)
           })
+        } else if (option === 'delete') {
+          console.log(option)
         }
       })
     },
